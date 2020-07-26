@@ -8,6 +8,7 @@ class Calculator extends Component{
             value: ""
         };
         this.handleClick = this.handleClick.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
     handleClick(val){
         if(val.target.value.toString() === "C")
@@ -16,10 +17,37 @@ class Calculator extends Component{
             // using eval is bad so this won't work for us: eval(this.state.value)
             // slightly safer:Function('"use strict";return (' + this.state.value + ')')()
             // safest method specifically using mathjs library [or other safe 3rd party library]
+            //using try catch like below is okay but better to use error boundary components: https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html
+            try{
             this.setState({value: math.evaluate(this.state.value)});
+            }catch{
+                alert("Invalid input expression, please try again");
+                this.setState({value: ""});
+            }
         }
         else
             this.setState({value: this.state.value + val.target.value.toString()});
+    }
+    handleKeyPress(btn){
+        if(btn.key.match(/\d|\+|\-|\*|\/|\./)?true:false)
+            this.setState({value: this.state.value + btn.key.toString()});
+        if(btn.key.match("Enter")){
+            //using try catch like below is okay but better to use error boundary components: https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html
+            try{
+                this.setState({value: math.evaluate(this.state.value)});
+            }catch{
+                alert("Invalid input expression, please try again");
+                this.setState({value: ""});
+            }
+        }
+        if(btn.key.match(/C|c/))
+            this.setState({value: ""});
+    }
+    componentDidMount(){
+        document.addEventListener("keypress",this.handleKeyPress,false)
+    }
+    componentWillUnmount(){
+        document.removeEventListener("keypress",this.handleKeyPress,false)
     }
     render(){
         //note, you'll see me style tag below, not best practice, only meant for submitting this component as an compact HW assignment
