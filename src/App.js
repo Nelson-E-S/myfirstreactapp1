@@ -4,17 +4,20 @@ import About from './Components/About';
 import About2 from './Components/About2';
 import './App.css';
 import GetImages from './Components/GetImages';
+import Calculator from './Components/Calculator';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <section>
+        {/* <section>
           <About />
           <About2 />
           <GetImages />
-      </section>
+          <hr />
+      </section> */}
+      <Calculator />
       </header>
     </div>
   );
